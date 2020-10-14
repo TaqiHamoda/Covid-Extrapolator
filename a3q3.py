@@ -1,8 +1,3 @@
-# CSC 336 Summer 2020 A3Q3 starter code
-
-# Please ask if you aren't sure what any part of the code does.
-# We will do a similar example on the Week 10 worksheet.
-
 # some general imports
 from time import perf_counter
 import datetime

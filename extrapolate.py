@@ -206,7 +206,7 @@ def plot_all_methods():
     plot_trajectories(xs[:, 1], "--g", "")
 
     plt.title("Ontario Covid-19 Data")
-    plt.ylabel("# of People in State")
+    plt.ylabel("# of People")
     plt.grid(True)
     plt.xticks(rotation=45)
     plt.legend()
@@ -214,110 +214,12 @@ def plot_all_methods():
     plt.show()
 
 
-# code for plot from the handout
-def make_handout_data_plot():
-    plt.rcParams.update({'font.size': 16})
-    plt.figure()
-
-    plot_trajectories(xs=data[:, 0], sty="-b")
-    plot_trajectories(xs=data[:, 1], sty='-r')
-
-    plt.grid(True, which='both')
-    plt.title("Ontario Covid-19 Data")
-    plt.legend(["Recovered", "Infected"])
-    plt.ylabel("# of people in state")
-    plt.tight_layout()
-    plt.show()
-
-    from matplotlib.ticker import (MultipleLocator, FormatStrFormatter, AutoMinorLocator)
-    ax = plt.gca()
-    ax.yaxis.set_major_locator(MultipleLocator(10000))
-    ax.yaxis.set_major_formatter(FormatStrFormatter('%d'))
-    ax.yaxis.set_minor_locator(MultipleLocator(2500))
-    plt.ylim([0, 37500])
-
-
-#####
-# Part (c)
-# add your code for your experiment to check
-# accuracy and efficiency of the three methods
-# Note: you should be calling simulation and varying n and method
-#####
-def q3_c():
-    sty = ["--b", "--r", "--g"]
-    time = []
-    errs = []
-    x = np.array([pow(2, i) for i in range(5, 14)])
-
-    for i in range(len(METHODS)):
-        time.append([])
-        errs.append([])
-        method = "I"*(i+1)
-
-        for n in x:
-            sol = simulation(n=n)[:, 2:]
-            t = perf_counter()
-            s = simulation(n=n, method=method)[:, 2:]
-            time[i].append(perf_counter() - t)
-            errs[i].append(norm(s - sol)/norm(sol))
-
-        plt.loglog(1/x, errs[i], sty[i], label="Method " + method)
-        print("Method " + method, "conv order", -np.log(errs[i][-1]/errs[i][-2])/np.log(2))
-
-    plt.title("Relative Error vs Step Size")
-    plt.xlabel("Step Size")
-    plt.ylabel("Relative Error")
-    plt.grid(True)
-    plt.legend()
-    plt.show()
-
-    for i in range(3):
-        plt.loglog(1/x, time[i], sty[i], label="Method " + "I"*(i+1))
-
-    plt.title("Runtime vs Step Size")
-    plt.xlabel("Step Size")
-    plt.ylabel("Runtime (seconds)")
-    plt.grid(True)
-    plt.legend()
-    plt.show()
-
-
-#####
-# Part (d)
-# add your code for similar experiment, but for a fixed value of n,
-# plot the error vs simulation time to see how the error changes
-# over the course of the simulation
-#####
-def q3_d():
-    sty = ["--b", "--r", "--g"]
-    errs = []
-
-    for i in range(len(METHODS)):
-        method = "I" * (i + 1)
-
-        sol = simulation(n=2)[:, 2:]
-        s = simulation(n=2, method=method)[:, 2:]
-        errs.append([norm(s[j] - sol[j]) / norm(sol[j]) for j in range(len(sol))])
-        xs = [i + 1 for i in range(len(sol))]
-
-        plt.plot(xs, errs[i], sty[i], label="Method " + method)
-
-    plt.title("Relative Error vs Iteration at n = 2")
-    plt.xlabel("Iteration")
-    plt.ylabel("Relative Error")
-    plt.grid(True)
-    plt.legend()
-    plt.show()
-
-
 ##########
-# Part (e)
-# setup your own experiment to investigate a scenario
-# what exactly you do is up to you, but you will most likely
-# want to pass in different values for ends and beta_factors
-# for your calls to simulation
+# Hypothetical experiment where mask-use decreases after august 2020.
+# This only models the data until october 2020
 ##########
-def q3_e():
+def extrapolate():
+    
     # base_ends = [28, 35, 49, 70, 94, 212]
     # base_beta_factors = [1, 0.57939203, 0.46448341, 0.23328388, 0.30647815, 0.19737586]
 
@@ -329,7 +231,7 @@ def q3_e():
     plot_trajectories(xs[:, 0], "--r", "Infected")
 
     plt.title("Ontario Covid-19 Data (Hypothetical)")
-    plt.ylabel("# of People in State")
+    plt.ylabel("# of People")
     plt.grid(True)
     plt.xticks(rotation=45)
     plt.legend()
@@ -338,4 +240,4 @@ def q3_e():
 
 
 if __name__ == '__main__':
-    q3_e()
+    extrapolate()

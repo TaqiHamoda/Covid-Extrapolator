@@ -215,7 +215,7 @@ def plot_all_methods():
 
 
 ##########
-# Hypothetical experiment where mask-use decreases after august 2020.
+# Hypothetical experiment where mask-use decreases after june 2020.
 # This only models the data until october 2020
 ##########
 def extrapolate():

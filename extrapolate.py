@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates  # for plotting dates
 
 
-# loads the data from the provided csv file
+# loads the data from the csv file
 # the data is stored in data, which will be
 # a numpy array - the first column is the number of recovered individuals
 #              - the second column is the number of infected individuals
@@ -52,15 +52,16 @@ x0 = np.array([S, E, I, R])
 
 
 # The right hand side function for the SEIR model ODE, x'(t) = F(x(t))
-# Feel free to use this when implementing the 3 methods, but you don't have to.
 def F(x):
-    return np.array([-x[0]*(beta/N * x[2]),
-                     (beta/N * x[0]*x[2] - w*x[1]),
-                     (w*x[1] - gamma*x[2]),
-                     x[2]*gamma])
+    s = -x[0]*(beta/N * x[2])
+    e = (beta/N * x[0]*x[2] - w*x[1])
+    i = (w*x[1] - gamma*x[2])
+    r = x[2]*gamma
+
+    return np.array([s, e, i, r])
 
 
-# your three numerical methods for performing a single time step
+# the three numerical methods for performing a single time step
 def method_I(x, h):
     s = x[0] - h*(beta/N)*x[0]*x[2]
     e = x[1] + h*(beta/N)*x[0]*x[2] - w*h*x[1]
@@ -80,12 +81,12 @@ def _method_II(x, previous_x, h):
 
 
 def jacobian_II(x, previous_x, h):
-    jac = [[h*(beta/N)*x[2], 0, h*(beta/N)*x[0], 0],
-           [-h*(beta/N)*x[2], w*h, -h*(beta/N)*x[0], 0],
-           [0, -w*h, h*gamma, 0],
-           [0, 0, -h*gamma, 0]]
+    jac1 = [h*(beta/N)*x[2], 0, h*(beta/N)*x[0], 0]
+    jac2 = [-h*(beta/N)*x[2], w*h, -h*(beta/N)*x[0], 0]
+    jac3 = [0, -w*h, h*gamma, 0]
+    jac4 = [0, 0, -h*gamma, 0]
 
-    return np.array(jac)
+    return np.array([jac1, jac2, jac3, jac4])
 
 
 def method_II(x, h):
